@@ -27,6 +27,7 @@ sudo apt-get update
 # Installation de Docker et des plugins nécessaires
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose
 
+sudo systemctl restart docker
 
 sudo chmod -R /home/ubuntu/scans
 

@@ -353,7 +353,7 @@ class FileEventHandler(FileSystemEventHandler):
                 log_message(f"Le fichier {file_path} n'a pas fini d'être copié.")
 
 if __name__ == "__main__":
-    send_telegram_message(f"⬆️ Bot Discovery démarré avec succès. ⬆️\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+    send_telegram_message(f"⬆️ Bot Discovery démarré avec succès. ⬆️\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}")
 
     # Traitez les fichiers existants dans le répertoire de surveillance
     for existing_file in Path(directories["watched_dir"]).iterdir():

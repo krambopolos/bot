@@ -25,9 +25,18 @@ echo \
 sudo apt-get update
 
 # Installation de Docker et des plugins nécessaires
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
-sudo systemctl restart docker
+sudo systemctl start docker
+
+# Télécharger la dernière version de Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# Rendre le binaire exécutable
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Vérifier l'installation
+docker-compose --version
 
 sudo chmod -R /home/ubuntu/scans
 

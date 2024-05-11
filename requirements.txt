@@ -1,0 +1,5 @@
+requests
+pathlib
+mysql-connector-python
+watchdog
+urllib3

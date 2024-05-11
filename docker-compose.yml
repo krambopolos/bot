@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    command: /bin/bash
+    volumes:
+      - ./scans:/app/scans
+      - ./backup:/app/backup
+      - ./queue:/app/queue
+      - ./app:/app/app
+      - ./logs:/app/logs
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Stupid!Rac00n666
+      MYSQL_DB: rez

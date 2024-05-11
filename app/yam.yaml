@@ -1,0 +1,210 @@
+id: aws-api-key2
+
+info:
+  name: AWS API Key
+  author: DhiyaneshDK
+  severity: info
+  reference:
+    - https://github.com/praetorian-inc/noseyparker/blob/main/data/default/rules/aws.yml
+    - https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+    - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
+    - https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html
+    - https://docs.aws.amazon.com/accounts/latest/reference/credentials-access-keys-best-practices.html
+  metadata:
+    verified: true
+    max-request: 1
+  tags: aws,amazon,token,exposure
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - '\b((?:A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16})\b'
+
+      - type: regex
+        part: body
+        regex:
+          # Secret Access Key regex
+          - r'\b([\'\"]([a-zA-Z0-9+/=]{40,})[\'\"])\b'
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)\b((LTAI)(?i)[a-z0-9]{20})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:bitbucket)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:bittrex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:coinbase)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)\b(dop_v1_[a-f0-9]{64})\b
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)\b(doo_v1_[a-f0-9]{64})\b
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - '\b(glpat-[0-9a-zA-Z_-]{20})(?:\b|$)'
+
+      - type: regex
+        part: body
+        regex:
+          - '(?i)jenkins.{0,10}(?:crumb)?.{0,10}\b([0-9a-f]{32,36})\b'
+
+      - type: regex
+        part: body
+        regex:
+          - "[0-9a-f]{32}-us[0-9]{1,2}"
+
+      - type: regex
+        part: body
+        regex:
+          - '(?i)(?:mailgun|mg).{0,20}key-([a-z0-9]{32})\b'
+
+      - type: regex
+        part: body
+        regex:
+          - 'SG\.[a-zA-Z0-9-_]{22}\.[a-zA-Z0-9_-]{43}'
+
+      - type: regex
+        part: body
+        regex:
+          - '\b(\d+:AA[a-zA-Z0-9_-]{32,33})'
+
+      - type: regex
+        part: body
+        regex:
+          - '(?i)twilio.{0,20}\b(sk[a-f0-9]{32})\b'
+
+      - type: regex
+        part: body
+        regex:
+          # GitHub App Token regex
+          - "\b((?:ghu|ghs)_[a-zA-Z0-9]{36})\b"
+
+      - type: regex
+        part: body
+        regex:
+          # GitLab Personal Access Token regex
+          - '\b(glpat-[0-9a-zA-Z_-]{20})(?:\b|$)'
+
+
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - '\b((?:A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16})\b'
+
+      - type: regex
+        part: body
+        regex:
+          # Secret Access Key regex
+          - r'\b([\'\"]([a-zA-Z0-9+/=]{40,})[\'\"])\b'
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)\b((LTAI)(?i)[a-z0-9]{20})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:bitbucket)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:bittrex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:coinbase)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)\b(dop_v1_[a-f0-9]{64})\b
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)\b(doo_v1_[a-f0-9]{64})\b
+
+      - type: regex
+        part: body
+        regex:
+          - (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+
+      - type: regex
+        part: body
+        regex:
+          - '\b(glpat-[0-9a-zA-Z_-]{20})(?:\b|$)'
+
+      - type: regex
+        part: body
+        regex:
+          - '(?i)jenkins.{0,10}(?:crumb)?.{0,10}\b([0-9a-f]{32,36})\b'
+
+      - type: regex
+        part: body
+        regex:
+          - "[0-9a-f]{32}-us[0-9]{1,2}"
+
+      - type: regex
+        part: body
+        regex:
+          - '(?i)(?:mailgun|mg).{0,20}key-([a-z0-9]{32})\b'
+
+      - type: regex
+        part: body
+        regex:
+          - 'SG\.[a-zA-Z0-9-_]{22}\.[a-zA-Z0-9_-]{43}'
+
+      - type: regex
+        part: body
+        regex:
+          - '\b(\d+:AA[a-zA-Z0-9_-]{32,33})'
+
+      - type: regex
+        part: body
+        regex:
+          - '(?i)twilio.{0,20}\b(sk[a-f0-9]{32})\b'
+      
+      - type: regex
+        part: body
+        regex:
+          # GitHub App Token regex
+          - "\b((?:ghu|ghs)_[a-zA-Z0-9]{36})\b"
+
+      - type: regex
+        part: body
+        regex:
+          # GitLab Personal Access Token regex
+          - '\b(glpat-[0-9a-zA-Z_-]{20})(?:\b|$)'

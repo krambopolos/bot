@@ -16,10 +16,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import mysql.connector
 from mysql.connector import Error
-from dotenv import load_dotenv
 
-
-load_dotenv()
 
 # Configuration des répertoires
 gopath_bin_path = "/home/ubuntu/go/bin"
@@ -72,12 +69,11 @@ chat_id = "6459873636"
 def insert_into_table(table_name, columns, values, unique_check_column, unique_value):
     """Insère une ligne dans une table spécifique en évitant les doublons."""
     try:
-        # Connexion à la base de données en utilisant les variables d'environnement
-        connection = connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_DATABASE
+        connection = mysql.connector.connect(
+            host="94.156.67.171",
+            user="root",
+            password="Stupid!Rac00n666",
+            database="rez"
         )
         cursor = connection.cursor()
 
@@ -99,9 +95,8 @@ def insert_into_table(table_name, columns, values, unique_check_column, unique_v
 
         cursor.close()
         connection.close()
-    except Error as e:
+    except mysql.connector.Error as e:
         print(f"Erreur d'insertion dans {table_name} : {e}")
-
 
 def insert_key_to_aws_no_secret_table(api_key, url):
     """Insère une clé AWS sans secret dans la table aws_keys_no_secret."""

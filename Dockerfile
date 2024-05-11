@@ -37,8 +37,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the project files into the container
 COPY . .
 
-# Expose port if necessary
-# EXPOSE 5000
 
 # Command to run the application
-CMD ["tail", "-f", "/dev/null"]
+CMD ["python", "bot.py"]

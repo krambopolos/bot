@@ -2,7 +2,7 @@ version: '3.8'
 services:
   app:
     build: .
-    command: tail -f /dev/null
+    command: python3 bot.py
     volumes:
       - ./scans:/app/scans
       - ./backup:/app/backup

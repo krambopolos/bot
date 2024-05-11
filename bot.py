@@ -322,9 +322,9 @@ def process_file(file_name):
             with open("final_results.txt", "r") as results_file:
                 final_results = results_file.read()
             process_results_with_regex_and_secrets(final_results, file_name)
-            send_telegram_message(f"----------------------------------------------\n\n✅ Processing successful for file {file_name}.\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+            send_telegram_message(f"⬆️ Processing successful for file {file_name}.\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}")
         else:
-            send_telegram_message(f"----------------------------------------------\n\n❌ Processing failed for file {file_name}, return code: {return_code}\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+            send_telegram_message(f"❌ Processing failed for file {file_name}, return code: {return_code}\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}")
         Path(directories["backup_dir"]).mkdir(parents=True, exist_ok=True)
         backup_file_path = f"{directories['backup_dir']}/{file_name}"
         shutil.move(dest_file_path, backup_file_path)
@@ -353,7 +353,7 @@ class FileEventHandler(FileSystemEventHandler):
                 log_message(f"Le fichier {file_path} n'a pas fini d'être copié.")
 
 if __name__ == "__main__":
-    send_telegram_message(f"----------------------------------------------\n\n✅ Bot Discovery démarré avec succès. ✅\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+    send_telegram_message(f"⬆️ Bot Discovery démarré avec succès. ⬆️\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
 
     # Traitez les fichiers existants dans le répertoire de surveillance
     for existing_file in Path(directories["watched_dir"]).iterdir():
@@ -373,4 +373,4 @@ if __name__ == "__main__":
         observer.stop()
     observer.join()
 
-    send_telegram_message(f"----------------------------------------------\n\n🛑 Bot Discovery arrêté. 🛑\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+    send_telegram_message(f"🛑 Bot Discovery arrêté. 🛑\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}")

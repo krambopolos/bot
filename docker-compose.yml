@@ -2,7 +2,7 @@ version: '3.8'
 services:
   app:
     build: .
-    command: /bin/bash
+    command: tail -f /dev/null
     volumes:
       - ./scans:/app/scans
       - ./backup:/app/backup

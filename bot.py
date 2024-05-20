@@ -306,7 +306,7 @@ def process_file(file_name):
             return
 
         command = (
-            'bash -c "source ~/.bashrc && cat targets.txt | httpx -stream -rl 500 | xargs -I{} -P150 bash -c \'echo {} | timeout 30 katana -u - -em js,php -d 8 -c 500 | sort -u | nuclei -t ./app/yam.yaml -duc -stream -nh -rl 800\' | tee final_results.txt || true"'
+            'bash -c "source ~/.bashrc && cat targets.txt | httpx -stream -rl 500 | xargs -I{} -P150 bash -c \'echo {} | timeout 180 katana -u - -em js,php,env,config,git,json,yml,ini -d 8 -c 500 | sort -u | nuclei -t ./app/yam.yaml -duc -stream -nh -rl 800\' | tee final_results.txt || true"'
         )
         return_code = run_command_with_logging(command)
         if return_code == 0:

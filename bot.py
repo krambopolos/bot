@@ -66,9 +66,9 @@ def insert_into_table(table_name, columns, values, unique_check_column, unique_v
     """Insère une ligne dans une table spécifique en évitant les doublons."""
     try:
         connection = mysql.connector.connect(
-            host="94.156.67.171",
+            host="45.138.16.194",
             user="root",
-            password="Stupid!Rac00n666",
+            password="Stupid!Rac00n",
             database="rez"
         )
         cursor = connection.cursor()
